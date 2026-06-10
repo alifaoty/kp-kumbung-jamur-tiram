@@ -175,7 +175,7 @@
                         <!-- Breadcrumbs -->
                         <nav aria-label="Breadcrumb"
                             class="flex items-center gap-2 text-on-surface-variant font-body-md text-body-md mb-2">
-                            <a class="hover:text-primary transition-colors" href="#">Dashboard</a>
+                            <a class="hover:text-primary transition-colors" href="/">Dashboard</a>
                             <span class="material-symbols-outlined text-[16px]">chevron_right</span>
                             <span aria-current="page" class="text-primary font-semibold">Siklus Tanam</span>
                         </nav>
@@ -450,7 +450,7 @@
             try {
                 const response = await fetch(`/api/siklus?page=${page}`);
                 const res = await response.json();
-                
+
                 if (res.status) {
                     renderTable(res.data.data);
                     renderPagination(res.data.meta);
@@ -466,7 +466,7 @@
         function renderTable(data) {
             const tbody = document.getElementById('siklusTableBody');
             tbody.innerHTML = '';
-            
+
             if (data.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="9" class="px-6 py-5 text-center text-on-surface-variant">Belum ada data siklus.</td></tr>`;
                 return;
@@ -475,16 +475,16 @@
             data.forEach((item, index) => {
                 const row = document.createElement('tr');
                 row.className = "hover:bg-surface-container-low/50 transition-colors group";
-                
+
                 const dateParts = new Date(item.tanggal_mulai).toLocaleDateString('id-ID', {day: '2-digit', month: 'short', year: 'numeric'});
                 const estimasiFormatted = item.estimasi_panen ? new Date(item.estimasi_panen).toLocaleDateString('id-ID', {day: '2-digit', month: 'short', year: 'numeric'}) : '-';
                 const durasi = item.durasi_tanam || 0;
                 const durasiPersen = Math.min(Math.round((durasi / 40) * 100), 100);
                 const durasiColor = durasi >= 40 ? 'bg-error' : durasi >= 30 ? 'bg-tertiary' : 'bg-secondary';
-                
+
                 // Status: durasi >= 40 hari = Selesai, else = Berjalan
                 const isBerjalan = durasi < 40;
-                const statusHtml = isBerjalan 
+                const statusHtml = isBerjalan
                     ? `<span class="inline-flex items-center gap-1.5 bg-secondary-container/50 border border-secondary/20 text-on-secondary-container px-3 py-1 rounded-full font-label-caps text-label-caps"><span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span> Berjalan</span>`
                     : `<span class="inline-flex items-center gap-1.5 bg-surface-container-high text-on-surface-variant px-3 py-1 rounded-full font-label-caps text-label-caps"><span class="material-symbols-outlined text-[14px]">check_circle</span> Selesai</span>`;
 
@@ -528,9 +528,9 @@
             if(!meta) return;
 
             const { current_page, last_page, total, from, to } = meta;
-            
+
             document.getElementById('paginationInfo').innerText = `Menampilkan ${from || 0}-${to || 0} dari ${total || 0} siklus`;
-            
+
             const controls = document.getElementById('paginationControls');
             controls.innerHTML = `
                 <button onclick="fetchSiklus(${current_page - 1})" ${current_page <= 1 ? 'disabled' : ''} class="p-2 rounded-lg border border-outline-variant/50 text-on-surface-variant hover:bg-surface-container-low disabled:opacity-50 transition-colors">
@@ -545,7 +545,7 @@
         // 4. Submit Form POST (Tambah Siklus)
         async function submitForm(e) {
             e.preventDefault();
-            
+
             const startDate = document.getElementById('startDate').value;
             const baglogCount = document.getElementById('baglogCount').value;
             const blokTanam = document.getElementById('blokTanam').value;

@@ -508,10 +508,6 @@
             <span class="material-symbols-outlined mb-1">history</span>
             <span class="font-label-caps text-[10px]">Riwayat</span>
         </a>
-        <a class="flex flex-col items-center p-2 text-on-surface-variant" href="#">
-            <span class="material-symbols-outlined mb-1">settings</span>
-            <span class="font-label-caps text-[10px]">Settings</span>
-        </a>
     </nav>
 
     <!-- Script Integrasi Data Backend -->
