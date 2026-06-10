@@ -164,8 +164,14 @@
         <!-- SideNavBar (Shared Component) -->
         <x-sidebar />
         <!-- Main Content Area -->
-        <main class="md:ml-64 w-full flex-1 h-screen overflow-y-auto bg-surface p-container-margin">
+        <main class="md:ml-64 w-full flex-1 h-screen overflow-y-auto bg-surface px-4 sm:px-6 lg:px-8">
             <div class="max-w-6xl mx-auto">
+                <header class="md:hidden flex items-center justify-between gap-3 py-4 border-b border-outline-variant/20 bg-surface sticky top-0 z-30">
+                    <button type="button" aria-label="Open menu" onclick="openMobileSidebar()"
+                        class="inline-flex items-center justify-center w-11 h-11 min-h-[44px] rounded-xl bg-surface-container text-on-surface hover:bg-surface-container-high transition-colors active:scale-95">
+                        <span class="material-symbols-outlined">menu</span>
+                    </button>
+                </header>
                 <!-- Header Section -->
                 <header class="flex flex-col md:flex-row md:justify-between md:items-end mb-section-gap gap-4">
                     <div>
@@ -181,7 +187,7 @@
                     </div>
                     <!-- Primary Action -->
                     <button
-                        class="bg-primary text-on-primary font-body-md text-body-md px-6 py-3 rounded-xl shadow-sm hover:bg-primary/90 transition-all active:scale-95 flex items-center justify-center gap-2"
+                        class="w-full md:w-auto min-h-[44px] bg-primary text-on-primary font-body-md text-body-md px-6 py-3 rounded-xl shadow-sm hover:bg-primary/90 transition-all active:scale-95 flex items-center justify-center gap-2"
                         onclick="openAddModal()">
                         <span class="material-symbols-outlined text-[20px]">add</span>
                         Catat Panen
@@ -232,7 +238,7 @@
                 <div
                     class="bg-surface-container-lowest rounded-xl border border-outline-variant/30 shadow-sm overflow-hidden">
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
+                        <table class="w-full min-w-[700px] text-left border-collapse">
                             <thead class="bg-surface-container-low border-b border-outline-variant/30">
                                 <tr>
                                     <th
@@ -273,7 +279,7 @@
         id="addPanenModal" role="dialog">
         <div class="absolute inset-0" onclick="document.getElementById('addPanenModal').classList.add('hidden')"></div>
         <div
-            class="relative bg-surface-container-lowest rounded-xl shadow-[0_8px_30px_rgb(45,106,79,0.12)] border border-outline-variant/20 w-full max-w-md p-6 transform transition-all">
+            class="relative bg-surface-container-lowest rounded-xl shadow-[0_8px_30px_rgb(45,106,79,0.12)] border border-outline-variant/20 w-full max-w-[95vw] sm:max-w-lg p-6 transform transition-all max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-6">
                 <h3 class="font-headline-md text-headline-md text-on-surface" id="add-modal-title">Catat Panen Baru</h3>
                 <button
@@ -282,7 +288,7 @@
                     <span class="material-symbols-outlined">close</span>
                 </button>
             </div>
-            <form class="space-y-5" onsubmit="submitAddForm(event)" id="addPanenForm">
+            <form class="space-y-4" onsubmit="submitAddForm(event)" id="addPanenForm">
                 <!-- Siklus Dropdown -->
                 <div>
                     <label class="block font-label-caps text-label-caps text-on-surface-variant mb-2"
@@ -328,14 +334,14 @@
                     <p class="mt-1 font-body-md text-[12px] text-on-surface-variant">Masukkan hasil panen dalam kilogram.</p>
                 </div>
                 <!-- Actions -->
-                <div class="mt-8 flex justify-end gap-3 pt-4 border-t border-outline-variant/20">
+                <div class="mt-6 flex flex-col md:flex-row justify-end gap-3 pt-4 border-t border-outline-variant/20">
                     <button
-                        class="px-5 py-2.5 rounded-xl font-body-md text-body-md text-on-surface-variant border border-outline-variant hover:bg-surface-container-low hover:text-on-surface transition-colors"
+                        class="w-full md:w-auto px-5 py-3 min-h-[44px] rounded-xl font-body-md text-body-md text-on-surface-variant border border-outline-variant hover:bg-surface-container-low hover:text-on-surface transition-colors"
                         onclick="document.getElementById('addPanenModal').classList.add('hidden')" type="button">
                         Batal
                     </button>
                     <button
-                        class="px-5 py-2.5 rounded-xl font-body-md text-body-md bg-primary text-on-primary hover:bg-primary/90 shadow-sm transition-all active:scale-95"
+                        class="w-full md:w-auto px-5 py-3 min-h-[44px] rounded-xl font-body-md text-body-md bg-primary text-on-primary hover:bg-primary/90 shadow-sm transition-all active:scale-95"
                         type="submit">
                         Simpan Panen
                     </button>
@@ -350,7 +356,7 @@
         id="editPanenModal" role="dialog">
         <div class="absolute inset-0" onclick="document.getElementById('editPanenModal').classList.add('hidden')"></div>
         <div
-            class="relative bg-surface-container-lowest rounded-xl shadow-[0_8px_30px_rgb(45,106,79,0.12)] border border-outline-variant/20 w-full max-w-md p-6 transform transition-all">
+            class="relative bg-surface-container-lowest rounded-xl shadow-[0_8px_30px_rgb(45,106,79,0.12)] border border-outline-variant/20 w-full max-w-[95vw] sm:max-w-lg p-6 transform transition-all max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-6">
                 <h3 class="font-headline-md text-headline-md text-on-surface" id="edit-modal-title">Edit Data Panen</h3>
                 <button
@@ -359,7 +365,7 @@
                     <span class="material-symbols-outlined">close</span>
                 </button>
             </div>
-            <form class="space-y-5" onsubmit="submitEditForm(event)" id="editPanenForm">
+            <form class="space-y-4" onsubmit="submitEditForm(event)" id="editPanenForm">
                 <input type="hidden" id="editPanenId" />
                 <!-- Siklus Dropdown -->
                 <div>
@@ -405,14 +411,14 @@
                     </div>
                 </div>
                 <!-- Actions -->
-                <div class="mt-8 flex justify-end gap-3 pt-4 border-t border-outline-variant/20">
+                <div class="mt-6 flex flex-col md:flex-row justify-end gap-3 pt-4 border-t border-outline-variant/20">
                     <button
-                        class="px-5 py-2.5 rounded-xl font-body-md text-body-md text-on-surface-variant border border-outline-variant hover:bg-surface-container-low hover:text-on-surface transition-colors"
+                        class="w-full md:w-auto px-5 py-3 min-h-[44px] rounded-xl font-body-md text-body-md text-on-surface-variant border border-outline-variant hover:bg-surface-container-low hover:text-on-surface transition-colors"
                         onclick="document.getElementById('editPanenModal').classList.add('hidden')" type="button">
                         Batal
                     </button>
                     <button
-                        class="px-5 py-2.5 rounded-xl font-body-md text-body-md bg-primary text-on-primary hover:bg-primary/90 shadow-sm transition-all active:scale-95"
+                        class="w-full md:w-auto px-5 py-3 min-h-[44px] rounded-xl font-body-md text-body-md bg-primary text-on-primary hover:bg-primary/90 shadow-sm transition-all active:scale-95"
                         type="submit">
                         Simpan Perubahan
                     </button>
