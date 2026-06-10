@@ -206,21 +206,6 @@
     class="bg-surface text-on-surface font-body-md h-screen overflow-hidden flex selection:bg-primary-container selection:text-on-primary-container">
     <!-- SideNavBar -->
     <x-sidebar />
-    <!-- TopNavBar (Mobile Only) -->
-    <header
-        class="flex md:hidden justify-between items-center px-4 py-3 w-full sticky top-0 z-50 bg-surface text-primary font-body-md text-body-md shadow-sm border-b-0 border-transparent bg-surface-container-low">
-        <div class="font-headline-md text-headline-md font-bold text-primary">Mushroom Monitor</div>
-        <div class="flex items-center gap-4">
-            <button
-                class="text-on-surface-variant hover:bg-surface-container-high p-2 rounded-full transition-colors active:scale-95">
-                <span class="material-symbols-outlined">notifications</span>
-            </button>
-            <button
-                class="text-on-surface-variant hover:bg-surface-container-high p-2 rounded-full transition-colors active:scale-95">
-                <span class="material-symbols-outlined">account_circle</span>
-            </button>
-        </div>
-    </header>
     <!-- Main Content Area -->
     <main class="flex-grow md:ml-64 h-full overflow-y-auto bg-background relative pt-4 md:pt-0">
         <!-- Ambient Background Glows -->
