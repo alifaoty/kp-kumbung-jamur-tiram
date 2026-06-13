@@ -486,33 +486,41 @@
                 const estimasiFormatted = item.estimasi_panen ? new Date(item.estimasi_panen).toLocaleDateString('id-ID', {day: '2-digit', month: 'short', year: 'numeric'}) : '-';
                 const durasi = item.durasi_tanam || 0;
                 const durasiPersen = Math.min(Math.round((durasi / 40) * 100), 100);
-                const durasiColor = durasi >= 40 ? 'bg-error' : durasi >= 30 ? 'bg-tertiary' : 'bg-secondary';
 
+                let statusHtml = '';
+                let durasiColor = 'bg-secondary';
                 // Status: durasi >= 40 hari = Selesai, else = Berjalan
-                const isBerjalan = durasi < 40;
-                const statusHtml = isBerjalan
-                    ? `<span class="inline-flex items-center gap-1.5 bg-secondary-container/50 border border-secondary/20 text-on-secondary-container px-3 py-1 rounded-full font-label-caps text-label-caps"><span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span> Berjalan</span>`
-                    : `<span class="inline-flex items-center gap-1.5 bg-surface-container-high text-on-surface-variant px-3 py-1 rounded-full font-label-caps text-label-caps"><span class="material-symbols-outlined text-[14px]">check_circle</span> Selesai</span>`;
+                const isSelesai = durasi >= 40;
 
+                if (durasi >= 40){
+                    durasiColor = 'bg-outline-variant';
+                    statusHtml = `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-high text-on-surface font-label-caps text-[11px]">Selesai</span>`;
+                } else if (durasi >= 30) {
+                    durasiColor = 'bg-amber-500';
+                    statusHtml = `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-tertiary-container text-on-tertiary font-label-caps text-[11px]">F-Akhir</span>`;
+                } else {
+                    durasiColor = 'bg-secondary';
+                    statusHtml = `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary-container text-on-secondary font-label-caps text-[11px]">Berjalan</span>`;
+                }
                 row.innerHTML = `
                     <td class="px-6 py-5">
-                        <div class="font-data-display text-[18px] ${isBerjalan ? 'text-primary font-semibold' : 'text-on-surface-variant'}">CYC-00${item.id}</div>
+                        <div class="font-data-display text-[18px] ${isSelesai ? 'text-primary font-semibold' : 'text-on-surface-variant'}">CYC-00${item.id}</div>
                     </td>
-                    <td class="px-6 py-5 font-body-md text-body-md ${isBerjalan ? 'text-on-surface' : 'text-on-surface-variant'}">
+                    <td class="px-6 py-5 font-body-md text-body-md ${isSelesai ? 'text-on-surface' : 'text-on-surface-variant'}">
                         <span class="inline-flex items-center gap-1.5"><span class="material-symbols-outlined text-[16px]">location_on</span>${item.blok_tanam || '-'}</span>
                     </td>
-                    <td class="px-6 py-5 font-body-md text-body-md ${isBerjalan ? 'text-on-surface' : 'text-on-surface-variant'}">${dateParts}</td>
-                    <td class="px-6 py-5 font-body-md text-body-md ${isBerjalan ? 'text-on-surface' : 'text-on-surface-variant'}">${Number(item.jumlah_backlog).toLocaleString('id-ID')}</td>
-                    <td class="px-6 py-5 font-body-md text-body-md ${isBerjalan ? 'text-on-surface' : 'text-on-surface-variant'}">${estimasiFormatted}</td>
+                    <td class="px-6 py-5 font-body-md text-body-md ${isSelesai ? 'text-on-surface' : 'text-on-surface-variant'}">${dateParts}</td>
+                    <td class="px-6 py-5 font-body-md text-body-md ${isSelesai ? 'text-on-surface' : 'text-on-surface-variant'}">${Number(item.jumlah_backlog).toLocaleString('id-ID')}</td>
+                    <td class="px-6 py-5 font-body-md text-body-md ${isSelesai ? 'text-on-surface' : 'text-on-surface-variant'}">${estimasiFormatted}</td>
                     <td class="px-6 py-5">
                         <div class="flex flex-col gap-1">
-                            <span class="font-label-caps text-[11px] ${isBerjalan ? 'text-on-surface' : 'text-on-surface-variant'}">${durasi} / 40 hari</span>
+                            <span class="font-label-caps text-[11px] ${isSelesai ? 'text-on-surface' : 'text-on-surface-variant'}">${durasi} / 40 hari</span>
                             <div class="w-full bg-surface-container-high rounded-full h-1.5 overflow-hidden">
                                 <div class="${durasiColor} h-full rounded-full transition-all" style="width: ${durasiPersen}%"></div>
                             </div>
                         </div>
                     </td>
-                    <td class="px-6 py-5 font-body-md text-body-md ${isBerjalan ? 'text-on-surface' : 'text-on-surface-variant'}">${item.total_panen || 0} <span class="text-sm border-none">kg</span></td>
+                    <td class="px-6 py-5 font-body-md text-body-md ${isSelesai ? 'text-on-surface' : 'text-on-surface-variant'}">${item.total_panen || 0} <span class="text-sm border-none">kg</span></td>
                     <td class="px-6 py-5">${statusHtml}</td>
                     <td class="px-6 py-5 text-right">
                         <div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
