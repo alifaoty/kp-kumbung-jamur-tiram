@@ -269,7 +269,7 @@
                     <span class="material-symbols-outlined">close</span>
                 </button>
             </div>
-            <form class="space-y-4" onsubmit="submitForm(event)" id="addCycleForm">
+            <form class="space-y-4" onsubmit="submitForm(event)" id="addCycleForm" novalidate>
                 <!-- Date Input -->
                 <div>
                     <label class="block font-label-caps text-label-caps text-on-surface-variant mb-2"
@@ -280,7 +280,7 @@
                         </span>
                         <input
                             class="w-full bg-surface border border-outline-variant/60 rounded-lg pl-10 pr-4 py-3 font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all hover:border-outline"
-                            id="startDate" name="startDate" required="" type="date" />
+                            id="startDate" name="startDate" type="date" />
                     </div>
                 </div>
                 <!-- Blok Tanam Input -->
@@ -293,8 +293,7 @@
                         </span>
                         <input
                             class="w-full bg-surface border border-outline-variant/60 rounded-lg pl-10 pr-4 py-3 font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all hover:border-outline"
-                            id="blokTanam" name="blokTanam" placeholder="Contoh: Blok A"
-                            required="" type="text" />
+                            id="blokTanam" name="blokTanam" placeholder="Contoh: Blok A" type="text" />
                     </div>
                 </div>
                 <!-- Number Input -->
@@ -308,7 +307,7 @@
                         <input
                             class="w-full bg-surface border border-outline-variant/60 rounded-lg pl-10 pr-4 py-3 font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all hover:border-outline"
                             id="baglogCount" min="1" name="baglogCount" placeholder="Contoh: 1000"
-                            required="" type="number" />
+                            type="number" />
                     </div>
                     <p class="mt-1 font-body-md text-[12px] text-on-surface-variant">Masukkan total baglog yang
                         dimasukkan ke kumbung.</p>
@@ -347,7 +346,7 @@
                     <span class="material-symbols-outlined">close</span>
                 </button>
             </div>
-            <form class="space-y-4" onsubmit="submitEditForm(event)" id="editCycleForm">
+            <form class="space-y-4" onsubmit="submitEditForm(event)" id="editCycleForm" novalidate>
                 <input type="hidden" id="editSiklusId" />
                 <!-- Date Input -->
                 <div>
@@ -359,7 +358,7 @@
                         </span>
                         <input
                             class="w-full bg-surface border border-outline-variant/60 rounded-lg pl-10 pr-4 py-3 font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all hover:border-outline"
-                            id="editStartDate" name="editStartDate" required="" type="date" />
+                            id="editStartDate" name="editStartDate" type="date" />
                     </div>
                 </div>
                 <!-- Blok Tanam Input -->
@@ -373,7 +372,7 @@
                         <input
                             class="w-full bg-surface border border-outline-variant/60 rounded-lg pl-10 pr-4 py-3 font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all hover:border-outline"
                             id="editBlokTanam" name="editBlokTanam" placeholder="Contoh: Blok A"
-                            required="" type="text" />
+                            type="text" />
                     </div>
                 </div>
                 <!-- Number Input -->
@@ -387,7 +386,7 @@
                         <input
                             class="w-full bg-surface border border-outline-variant/60 rounded-lg pl-10 pr-4 py-3 font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all hover:border-outline"
                             id="editBaglogCount" min="1" name="editBaglogCount" placeholder="Contoh: 1000"
-                            required="" type="number" />
+                            type="number" />
                     </div>
                     <p class="mt-1 font-body-md text-[12px] text-on-surface-variant">Masukkan total baglog yang
                         dimasukkan ke kumbung.</p>
@@ -442,6 +441,7 @@
             </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Script Integrasi Data Backend -->
     <script>
         let currentPage = 1;
@@ -557,6 +557,54 @@
             const blokTanam = document.getElementById('blokTanam').value;
             const submitBtn = e.target.querySelector('button[type="submit"]');
 
+            if(!startDate) {
+                Swal.fire({
+                    icon: 'warning',
+                    text: 'Tanggal tanam wajib diisi!',
+                    confirmButtonText: 'OK',
+                    customClass: {
+                        confirmButton: 'bg-primary text-on-primary hover:bg-primary/90'
+                    }
+                });
+                return;
+            }
+
+            if(!blokTanam) {
+                Swal.fire({
+                    icon: 'warning',
+                    text: 'Blok tanam wajib diisi!',
+                    confirmButtonText: 'OK',
+                    customClass: {
+                        confirmButton: 'bg-primary text-on-primary hover:bg-primary/90'
+                    }
+                });
+                return;
+            }
+
+            if(!baglogCount) {
+                Swal.fire({
+                    icon: 'warning',
+                    text: 'Jumlah baglog wajib diisi!',
+                    confirmButtonText: 'OK',
+                    customClass: {
+                        confirmButton: 'bg-primary text-on-primary hover:bg-primary/90'
+                    }
+                });
+                return;
+            }
+
+            if(!baglogCount || baglogCount <= 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    text: 'Jumlah baglog harus lebih dari 0!',
+                    confirmButtonText: 'OK',
+                    customClass: {
+                        confirmButton: 'bg-primary text-on-primary hover:bg-primary/90'
+                    }
+                });
+                return;
+            }
+
             const payload = {
                 tanggal_mulai: startDate,
                 jumlah_backlog: parseInt(baglogCount, 10),
@@ -584,7 +632,14 @@
                     document.getElementById('addCycleForm').reset();
                     fetchSiklus(1); // Refresh ke halaman 1
                 } else {
-                    alert('Gagal: ' + (res.message || 'Harap periksa input Anda.'));
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Gagal: ' + (res.message || 'Harap periksa input Anda.'),
+                        confirmButtonText: 'OK',
+                        customClass: {
+                            confirmButton: 'bg-primary text-on-primary hover:bg-primary/90'
+                        }
+                    });
                 }
             } catch (error) {
                 console.error('Error submitting form:', error);
@@ -638,8 +693,36 @@
                 if (response.ok && res.status) {
                     document.getElementById('editCycleModal').classList.add('hidden');
                     fetchSiklus(currentPage); // Refresh halaman saat ini
+
+                    Swal.fire({
+                        icon: 'success',
+                        text: 'Siklus berhasil diperbarui!',
+                        confirmButtonText: 'OK',
+                        customClass: {
+                            confirmButton: 'bg-primary text-on-primary hover:bg-primary/90'
+                        }
+                    });
                 } else {
-                    alert('Gagal: ' + (res.message || 'Harap periksa input Anda.'));
+                    if (res.errors){
+                        const errorMessages = Object.values(res.errors).flat().join('\n');
+                        Swal.fire({
+                            icon: 'warning',
+                            html: errorMessages.replace(/\n/g, '<br>'),
+                            confirmButtonText: 'OK',
+                            customClass: {
+                                confirmButton: 'bg-primary text-on-primary hover:bg-primary/90'
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Gagal: ',
+                            confirmButtonText: 'OK',
+                            customClass: {
+                                confirmButton: 'bg-primary text-on-primary hover:bg-primary/90'
+                            }
+                        });
+                    }
                 }
             } catch (error) {
                 console.error('Error updating siklus:', error);

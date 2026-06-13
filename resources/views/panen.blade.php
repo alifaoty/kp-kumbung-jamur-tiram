@@ -288,7 +288,7 @@
                     <span class="material-symbols-outlined">close</span>
                 </button>
             </div>
-            <form class="space-y-4" onsubmit="submitAddForm(event)" id="addPanenForm">
+            <form class="space-y-4" onsubmit="submitAddForm(event)" id="addPanenForm" novalidate>
                 <!-- Siklus Dropdown -->
                 <div>
                     <label class="block font-label-caps text-label-caps text-on-surface-variant mb-2"
@@ -315,7 +315,7 @@
                         </span>
                         <input
                             class="w-full bg-surface border border-outline-variant/60 rounded-lg pl-10 pr-4 py-3 font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all hover:border-outline"
-                            id="addTanggalPanen" required="" type="date" />
+                            id="addTanggalPanen" type="date" />
                     </div>
                 </div>
                 <!-- Amount Input -->
@@ -329,7 +329,7 @@
                         <input
                             class="w-full bg-surface border border-outline-variant/60 rounded-lg pl-10 pr-4 py-3 font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all hover:border-outline"
                             id="addJumlahPanen" min="1" placeholder="Contoh: 50"
-                            required="" type="number" />
+                            type="number" />
                     </div>
                     <p class="mt-1 font-body-md text-[12px] text-on-surface-variant">Masukkan hasil panen dalam kilogram.</p>
                 </div>
@@ -365,7 +365,7 @@
                     <span class="material-symbols-outlined">close</span>
                 </button>
             </div>
-            <form class="space-y-4" onsubmit="submitEditForm(event)" id="editPanenForm">
+            <form class="space-y-4" onsubmit="submitEditForm(event)" id="editPanenForm" novalidate>
                 <input type="hidden" id="editPanenId" />
                 <!-- Siklus Dropdown -->
                 <div>
@@ -393,7 +393,7 @@
                         </span>
                         <input
                             class="w-full bg-surface border border-outline-variant/60 rounded-lg pl-10 pr-4 py-3 font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all hover:border-outline"
-                            id="editTanggalPanen" required="" type="date" />
+                            id="editTanggalPanen" type="date" />
                     </div>
                 </div>
                 <!-- Amount Input -->
@@ -407,7 +407,7 @@
                         <input
                             class="w-full bg-surface border border-outline-variant/60 rounded-lg pl-10 pr-4 py-3 font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all hover:border-outline"
                             id="editJumlahPanen" min="1" placeholder="Contoh: 50"
-                            required="" type="number" />
+                            type="number" />
                     </div>
                 </div>
                 <!-- Actions -->
@@ -459,6 +459,7 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Script Integrasi Data Backend -->
     <script>
         let currentPage = 1;
@@ -596,6 +597,54 @@
             const jumlahPanen = document.getElementById('addJumlahPanen').value;
             const submitBtn = e.target.querySelector('button[type="submit"]');
 
+            if(!siklusId) {
+                Swal.fire({
+                    icon: 'warning',
+                    text: 'Siklus wajib diisi!',
+                    confirmButtonText: 'OK',
+                    customClass: {
+                        confirmButton: 'bg-primary text-on-primary hover:bg-primary/90'
+                    }
+                });
+                return;
+            }
+
+            if(!tanggalPanen) {
+                Swal.fire({
+                    icon: 'warning',
+                    text: 'Tanggal panen wajib diisi!',
+                    confirmButtonText: 'OK',
+                    customClass: {
+                        confirmButton: 'bg-primary text-on-primary hover:bg-primary/90'
+                    }
+                });
+                return;
+            }
+
+            if(!jumlahPanen) {
+                Swal.fire({
+                    icon: 'warning',
+                    text: 'Jumlah panen wajib diisi!',
+                    confirmButtonText: 'OK',
+                    customClass: {
+                        confirmButton: 'bg-primary text-on-primary hover:bg-primary/90'
+                    }
+                });
+                return;
+            }
+
+            if(parseInt(jumlahPanen) <= 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    text: 'Jumlah panen harus lebih dari 0!',
+                    confirmButtonText: 'OK',
+                    customClass: {
+                        confirmButton: 'bg-primary text-on-primary hover:bg-primary/90'
+                    }
+                });
+                return;
+            }
+
             const payload = {
                 siklus_id: parseInt(siklusId, 10),
                 tanggal_panen: tanggalPanen,
@@ -622,11 +671,25 @@
                     document.getElementById('addPanenForm').reset();
                     fetchPanen(1);
                 } else {
-                    alert('Gagal: ' + (res.message || 'Harap periksa input Anda.'));
+                    Swal.fire({
+                        icon: 'error',
+                        text: res.message || 'Gagal menyimpan data. Harap periksa input Anda.',
+                        confirmButtonText: 'OK',
+                        customClass: {
+                            confirmButton: 'bg-primary text-on-primary hover:bg-primary/90'
+                        }
+                    });
                 }
             } catch (error) {
                 console.error('Error creating panen:', error);
-                alert('Terjadi kesalahan pada server.');
+                Swal.fire({
+                    icon: 'error',
+                    text: 'Terjadi kesalahan pada server.',
+                    confirmButtonText: 'OK',
+                    customClass: {
+                        confirmButton: 'bg-primary text-on-primary hover:bg-primary/90'
+                    }
+                });
             } finally {
                 submitBtn.innerText = 'Simpan Panen';
                 submitBtn.disabled = false;
@@ -657,6 +720,7 @@
                 tanggal_panen: tanggalPanen,
                 jumlah_panen: parseInt(jumlahPanen, 10)
             };
+            console.log({id, siklusId, tanggalPanen, jumlahPanen});
 
             try {
                 submitBtn.innerText = 'Menyimpan...';
@@ -677,11 +741,28 @@
                     document.getElementById('editPanenModal').classList.add('hidden');
                     fetchPanen(currentPage);
                 } else {
-                    alert('Gagal: ' + (res.message || 'Harap periksa input Anda.'));
+                    let errorMsg = res.message;
+                    if (res.errors) {
+                        errorMsg = Object.values(res.errors).flat().join(' ');                   }
+                    Swal.fire({
+                        icon: 'error',
+                        text: errorMsg,
+                        confirmButtonText: 'OK',
+                        customClass: {
+                            confirmButton: 'bg-primary text-on-primary hover:bg-primary/90'
+                        }
+                    });
                 }
             } catch (error) {
                 console.error('Error updating panen:', error);
-                alert('Terjadi kesalahan pada server.');
+                Swal.fire({
+                    icon: 'error',
+                    text: 'Terjadi kesalahan pada server.',
+                    confirmButtonText: 'OK',
+                    customClass: {
+                        confirmButton: 'bg-primary text-on-primary hover:bg-primary/90'
+                    }
+                });
             } finally {
                 submitBtn.innerText = 'Simpan Perubahan';
                 submitBtn.disabled = false;
@@ -717,11 +798,25 @@
                     document.getElementById('deletePanenModal').classList.add('hidden');
                     fetchPanen(currentPage);
                 } else {
-                    alert('Gagal: ' + (res.message || 'Tidak dapat menghapus data.'));
+                    Swal.fire({
+                        icon: 'error',
+                        text: res.message || 'Gagal menghapus data.',
+                        confirmButtonText: 'OK',
+                        customClass: {
+                            confirmButton: 'bg-primary text-on-primary hover:bg-primary/90'
+                        }
+                    });
                 }
             } catch (error) {
                 console.error('Error deleting panen:', error);
-                alert('Terjadi kesalahan pada server.');
+                Swal.fire({
+                    icon: 'error',
+                    text: 'Terjadi kesalahan pada server.',
+                    confirmButtonText: 'OK',
+                    customClass: {
+                        confirmButton: 'bg-primary text-on-primary hover:bg-primary/90'
+                    }
+                });
             } finally {
                 deleteBtn.innerText = 'Hapus';
                 deleteBtn.disabled = false;
