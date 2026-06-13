@@ -7,6 +7,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>Mushroom Monitor Dashboard</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src = "https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
         rel="stylesheet" />
@@ -363,56 +364,17 @@
                     </div>
                 </div>
                 <!-- Main Chart Area (Span 8) — STATIC (no sensor history API) -->
-                <div
-                    class="md:col-span-8 bg-surface-container-lowest rounded-xl p-card-padding soft-shadow min-h-[400px] flex flex-col">
-                    <div class="flex justify-between items-center mb-6">
+                <div class="md:col-span-8 bg-surface-container-lowest rounded-xl p-6 soft-shadow">
+                    <div class="flex justify-between items-center mb-4">
                         <h3 class="font-headline-md text-headline-md text-on-surface">Environmental Trends (24h)</h3>
-                        <div class="flex gap-2">
-                            <span
-                                class="flex items-center gap-1 font-label-caps text-label-caps text-on-surface-variant">
-                                <span class="w-3 h-3 rounded-full bg-primary inline-block"></span> Temp
-                            </span>
-                            <span
-                                class="flex items-center gap-1 font-label-caps text-label-caps text-on-surface-variant">
-                                <span class="w-3 h-3 rounded-full bg-secondary inline-block"></span> Humid
-                            </span>
-                        </div>
                     </div>
-                    <!-- Faux Chart Area -->
-                    <div class="flex-grow relative border-l border-b border-outline-variant/50 pt-4 pr-4 pb-2 pl-2">
-                        <!-- Y-axis labels -->
-                        <div
-                            class="absolute -left-8 top-0 bottom-0 flex flex-col justify-between font-label-caps text-[10px] text-on-surface-variant py-4">
-                            <span>100</span><span>75</span><span>50</span><span>25</span><span>0</span>
-                        </div>
-                        <!-- X-axis labels -->
-                        <div
-                            class="absolute -bottom-6 left-0 right-0 flex justify-between font-label-caps text-[10px] text-on-surface-variant px-4">
-                            <span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>Now</span>
-                        </div>
-                        <!-- Grid lines -->
-                        <div class="absolute inset-0 flex flex-col justify-between pointer-events-none">
-                            <div class="w-full h-px bg-outline-variant/20"></div>
-                            <div class="w-full h-px bg-outline-variant/20"></div>
-                            <div class="w-full h-px bg-outline-variant/20"></div>
-                            <div class="w-full h-px bg-outline-variant/20"></div>
-                            <div class="w-full h-px bg-outline-variant/20"></div>
-                        </div>
-                        <!-- Chart lines (SVG) -->
-                        <svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 100 100">
-                            <!-- Temp Line -->
-                            <path class="stroke-primary" d="M0,70 L20,65 L40,68 L60,55 L80,60 L100,58" fill="none"
-                                stroke-width="2" vector-effect="non-scaling-stroke"></path>
-                            <!-- Humidity Line -->
-                            <path class="stroke-secondary" d="M0,20 L20,15 L40,25 L60,10 L80,18 L100,15"
-                                fill="none" stroke-width="2" vector-effect="non-scaling-stroke"></path>
-                            <!-- Highlight Area under Temp -->
-                            <path class="fill-primary/5"
-                                d="M0,70 L20,65 L40,68 L60,55 L80,60 L100,58 L100,100 L0,100 Z"></path>
-                        </svg>
+
+                    <div class="relative h-64 md:h-80 lg:h-96">
+                        <canvas id="envChart"></canvas>
                     </div>
                 </div>
-                <!-- Recent Activities List (Span 4) — STATIC (no activities table) -->
+
+                    <!-- Recent Activities List (Span 4) — STATIC (no activities table) -->
                 <div
                     class="md:col-span-4 bg-surface-container-lowest rounded-xl p-card-padding soft-shadow flex flex-col">
                     <h3 class="font-headline-md text-headline-md text-on-surface mb-6">Recent Activity</h3>
@@ -592,6 +554,45 @@
                 console.error('Error fetching active cycle:', error);
             }
         }
+        const ctx = document.getElementById('envChart');
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['00:00','06:00','12:00','18:00','Now'],
+                datasets: [
+                    {
+                        label: 'Temp',
+                        data: [80,85,75,90,85],
+                        borderColor: '#166534',
+                        backgroundColor: 'transparent',
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Humid',
+                        data: [30,35,32,45,42],
+                        borderColor: '#65a30d',
+                        backgroundColor: 'rgba(101,163,13,0.15)',
+                        fill: true,
+                        tension: 0.4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
     </script>
 </body>
 
