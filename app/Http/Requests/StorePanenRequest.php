@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Siklus;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -54,5 +55,16 @@ class StorePanenRequest extends FormRequest
                 'errors'  => $validator->errors(),
             ], 422)
         );
+    }
+
+    public function withValidator($validator): void
+    {
+        $validator->after(function ($validator) {
+            $siklus = Siklus::find($this->siklus_id);
+
+            if ($siklus && $this->tanggal_panen < $siklus->tanggal_tanam) {
+                $validator->errors()->add('tanggal_panen', 'Tanggal panen tidak boleh sebelum tanggal tanam.');
+            }
+        });
     }
 }
